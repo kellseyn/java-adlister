@@ -1,20 +1,10 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%--<%! int counter = 0; %>--%>
-<%--<% counter += 1; %>--%>
-<html>
-
-
-<nav>
-    <ul>
-        <li>Home</li>
-        <li>Directory</li>
-        <li>Login</li>
-    </ul>
+<nav class="nav">
+    <a class="nav-link active" href="#">LOGIN</a>
+    <a class="nav-link" href="#">Directory</a>
+    <a class="nav-link" href="#">FAQ</a>
 </nav>
 
 
 <%-- this is a JSP comment, you will *not* see this in the html --%>
 
 <!-- this is an HTML comment, you *will* see this in the html -->
-
-</html>

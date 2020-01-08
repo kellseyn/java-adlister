@@ -4,7 +4,13 @@
 <html>
 <head>
     <title>Example</title>
+    <%@ include file="partials/head.jsp"%>
+    <%@ include file = "partials/navbar.jsp"%>
+    <style>
+        <%@include file="css/index.css"%>
+    </style>
 </head>
 <body>
+
 </body>
 </html>
