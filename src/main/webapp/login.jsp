@@ -13,8 +13,8 @@
 <body>
 <p>Username: <%= request.getParameter("username") %></p>
 <p>Password: <%= request.getParameter("password") %></p>
-<%! String isAdmin = "admin"%>
-<c:if test="${username.isAdmin}"> <form method="POST" action="/profile.jsp"></form> </c:if>
+<%! String isAdmin = "admin"; %>
+<c:if test="${isAdmin}"> <form method="POST" action="/profile.jsp"></form> </c:if>
 <h1>The current count is <%= counter %>.</h1>
 <form method="POST" action="/login.jsp">
     <label for="username">Username:</label>
