@@ -7,4 +7,5 @@ public class ContactsDaoFactory {
         }
         return contactsDao;
     }
+
 }

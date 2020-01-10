@@ -8,6 +8,10 @@ import java.io.IOException;
 @WebServlet("/listofcontacts")
 public class ContactServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        request.setAttribute("contacts", ContactsDaoFactory.contactsDao().getContacts());
+
         request.getRequestDispatcher("/listofcontacts.jsp").forward(request, response);
+
     }
 }
