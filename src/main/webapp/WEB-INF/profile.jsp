@@ -11,9 +11,9 @@
 
     <div class="container">
         <h1>Viewing your profile</h1>
-        <h2>Welcome, <c:out value="${}"/></h2>
+        <h2>Welcome, ${sessionScope.user}</h2>
 
-        <a href="/login">Log out</a>
+        <a href="/logout">Log out</a>
     </div>
 
 </body>
