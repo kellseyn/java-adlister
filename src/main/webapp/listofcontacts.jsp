@@ -11,8 +11,10 @@
 <jsp:include page="partials/navbar.jsp" />
 
 <div class="container">
-    <c:forEach var="contacts" items="${contact.firstName}">
-        <h2></h2>
+    <c:forEach var="contacts" items="${contacts}">
+        <h2>${contacts.firstName} ${contacts.lastName}</h2>
+        <p>${contacts.phoneNumber}</p>
+
     </c:forEach>
 </div>
 
