@@ -1,26 +1,21 @@
-import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import com.mysql.cj.jdbc.Driver;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MySQLAdsDao implements Ads {
 
-    Config config = new Config();
     private Connection connection;
 
-    public MySQLAdsDao(){
-
-        this.connection = DriverManager.getConnection();
-    }
-
-    {
+    public MySQLAdsDao() {
         try {
-            connection = DriverManager.getConnection(
-                        config.getUrl(),
-                        config.getUsername(),
-                        config.getPassword()
-                );
+            Config config = new Config();
+            DriverManager.registerDriver(new Driver());
+            this.connection = DriverManager.getConnection(
+                    config.getUrl(),
+                    config.getUsername(),
+                    config.getPassword()
+            );
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -35,4 +30,5 @@ public class MySQLAdsDao implements Ads {
     public Long insert(Ad ad) {
         return null;
     }
+
 }

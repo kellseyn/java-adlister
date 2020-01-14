@@ -1,0 +1,9 @@
+USE adlister_kellsey_db;
+DROP TABLE if EXISTS users;
+CREATE TABLE if NOT EXISTS users(
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  username VARCHAR (99) NOT NULL,
+  email VARCHAR (99) NOT NULL,
+  password VARCHAR (99) NOT NULL,
+  PRIMARY KEY (id)
+);
