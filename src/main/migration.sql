@@ -1,0 +1,20 @@
+USE adlister_kellsey_db;
+
+DROP TABLE if EXISTS users;
+CREATE TABLE if NOT EXISTS users(
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  username VARCHAR (99) NOT NULL,
+  email VARCHAR (99) NOT NULL,
+  password VARCHAR (99) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+DROP TABLE if EXISTS ads;
+CREATE TABLE if NOT EXISTS ads(
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  title VARCHAR (99) NOT NULL,
+  description VARCHAR (255) NOT NULL,
+  user_id INT UNSIGNED,
+  PRIMARY KEY(id),
+  FOREIGN KEY (user_id) REFERENCES users (id)
+);

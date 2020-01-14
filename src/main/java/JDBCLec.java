@@ -1,7 +1,5 @@
-package models;
 
 import com.mysql.cj.jdbc.Driver;
-import com.mysql.cj.mysqlx.protobuf.MysqlxCrud;
 
 import java.sql.*;
 
