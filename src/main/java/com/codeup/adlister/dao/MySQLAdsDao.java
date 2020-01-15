@@ -18,7 +18,7 @@ public class MySQLAdsDao implements Ads {
             DriverManager.registerDriver(new Driver());
             connection = DriverManager.getConnection(
                 config.getUrl(),
-                config.getUser(),
+                config.getUsername(),
                 config.getPassword()
             );
         } catch (SQLException e) {
@@ -28,14 +28,26 @@ public class MySQLAdsDao implements Ads {
 
     @Override
     public List<Ad> all() {
-        Statement stmt = null;
         try {
-            stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM ads");
-            return createAdsFromResults(rs);
+//            stmt = connection.createStatement();
+            String sql = "SELECT * FROM ads WHERE title LIKE ?";
+            String searchTermWithWildcards = "%" + "test" + "%";
+
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, searchTermWithWildcards);
+
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()) {
+                // do something with the search results
+                System.out.println(createAdsFromResults(rs));
+//            ResultSet rs = stmt.executeQuery("SELECT * FROM ads");
+                return createAdsFromResults(rs);
+
+            }
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving all ads.", e);
         }
+        return all();
     }
 
     @Override
