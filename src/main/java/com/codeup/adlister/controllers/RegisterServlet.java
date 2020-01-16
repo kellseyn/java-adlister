@@ -21,9 +21,9 @@ public class RegisterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         User user = new User(
                 1,
-                request.getAttribute("username"),
-                request.getAttribute("email"),
-                request.getAttribute("password")
+                request.getParameter("username"),
+                request.getParameter("email"),
+                request.getParameter("password")
         );
         DaoFactory.getUsersDao().insert(user);
         response.sendRedirect("/profile");
