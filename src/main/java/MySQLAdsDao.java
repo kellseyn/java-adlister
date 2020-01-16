@@ -1,79 +1,99 @@
+
 import com.codeup.adlister.dao.Config;
 import com.mysql.cj.jdbc.Driver;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MySQLAdsDao implements Ads {
-    private Connection connection;
+    private Connection connection = null;
 
-    public MySQLAdsDao() {
+    public MySQLAdsDao(Config config) {
         try {
-            Config config = new Config();
             DriverManager.registerDriver(new Driver());
-            this.connection = DriverManager.getConnection(
+            connection = DriverManager.getConnection(
                     config.getUrl(),
                     config.getUsername(),
                     config.getPassword()
             );
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error connecting to the database!", e);
         }
+    }
+
+    public MySQLAdsDao() {
+
     }
 
     @Override
     public List<Ad> all() {
-
-        List<Ad> output = new ArrayList<>();
+        Statement stmt = null;
         try {
-            Statement stmt = connection.createStatement();
+            stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM ads");
-            while(rs.next()){
-                output.add(
-                        new Ad(
-                                rs.getLong("id"),
-                                rs.getLong("user_id"),
-                                rs.getString("title"),
-                                rs.getString("description")
-                        )
-                );
-            }
+            return createAdsFromResults(rs);
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving all ads.", e);
         }
-        return output;
     }
 
     @Override
-    public Long insert(Ad newAd) throws SQLException {
-        String insertQuery = "INSERT INTO ads (user_id, title, description) VALUES (" + newAd.getUserId() + ",'" + newAd.getTitle() +"','" + newAd.getDescription() + "')";
-        Statement stmt = connection.createStatement();
-            stmt.executeUpdate(insertQuery, Statement.RETURN_GENERATED_KEYS);
-        ResultSet rs = stmt.getGeneratedKeys();
+    public Long insert(Ad ad) {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate(createInsertQuery(ad), Statement.RETURN_GENERATED_KEYS);
+            ResultSet rs = stmt.getGeneratedKeys();
+            rs.next();
+            return rs.getLong(1);
+        } catch (SQLException e) {
+            throw new RuntimeException("Error creating a new ad.", e);
+        }
+    }
 
-        if(rs.next()) {
-                System.out.println(rs.getLong(1));
-            }
-        return rs.getLong(1);
+    private String createInsertQuery(Ad ad) {
+        return "INSERT INTO ads(user_id, title, description) VALUES "
+                + "(" + ad.getUserId() + ", "
+                + "'" + ad.getTitle() +"', "
+                + "'" + ad.getDescription() + "')";
+    }
 
+    private Ad extractAd(ResultSet rs) throws SQLException {
+        return new Ad(
+                rs.getLong("id"),
+                rs.getLong("user_id"),
+                rs.getString("title"),
+                rs.getString("description")
+        );
+    }
+
+    private List<Ad> createAdsFromResults(ResultSet rs) throws SQLException {
+        List<Ad> ads = new ArrayList<>();
+        while (rs.next()) {
+            ads.add(extractAd(rs));
+        }
+        return ads;
     }
 
 
-public static void main(String[] args) throws SQLException {
-    Ads adsDao = new MySQLAdsDao();
 
-    Ad testAd = new Ad(
-            1,
-            "test title",
-            "test description"
-    );
+    public static void main(String[] args) throws SQLException {
+        Ads adsDao = new MySQLAdsDao();
 
-    adsDao.insert(testAd);
-    List<Ad> ads = adsDao.all();
-    for (Ad ad : ads){
-        System.out.println(ad);
+        Ad testAd = new Ad(
+                1,
+                "test title",
+                "test description"
+        );
+
+        adsDao.insert(testAd);
+        List<Ad> ads = adsDao.all();
+        for (Ad ad : ads){
+            System.out.println(ad);
+        }
     }
-}
 }
 
