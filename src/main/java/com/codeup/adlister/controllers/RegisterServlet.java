@@ -1,5 +1,8 @@
 package com.codeup.adlister.controllers;
 
+import com.codeup.adlister.dao.DaoFactory;
+import com.codeup.adlister.models.User;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,7 +18,16 @@ public class RegisterServlet extends HttpServlet {
         // TODO: show the registration form
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        User user = new User(
+                1,
+                request.getAttribute("username"),
+                request.getAttribute("email"),
+                request.getAttribute("password")
+        );
+        DaoFactory.getUsersDao().insert(user);
+        response.sendRedirect("/profile");
+
         // TODO: ensure the submitted information is valid
         // TODO: create a new user based off of the submitted information
         // TODO: if a user was successfully created, send them to their profile
