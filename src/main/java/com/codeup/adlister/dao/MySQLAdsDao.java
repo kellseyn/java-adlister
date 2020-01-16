@@ -28,26 +28,14 @@ public class MySQLAdsDao implements Ads {
 
     @Override
     public List<Ad> all() {
+        Statement stmt = null;
         try {
-//            stmt = connection.createStatement();
-            String sql = "SELECT * FROM ads WHERE title LIKE ?";
-            String searchTermWithWildcards = "%" + "test" + "%";
-
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setString(1, searchTermWithWildcards);
-
-            ResultSet rs = stmt.executeQuery();
-            while(rs.next()) {
-                // do something with the search results
-                System.out.println(createAdsFromResults(rs));
-//            ResultSet rs = stmt.executeQuery("SELECT * FROM ads");
-                return createAdsFromResults(rs);
-
-            }
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM ads");
+            return createAdsFromResults(rs);
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving all ads.", e);
         }
-        return all();
     }
 
     @Override
@@ -65,17 +53,17 @@ public class MySQLAdsDao implements Ads {
 
     private String createInsertQuery(Ad ad) {
         return "INSERT INTO ads(user_id, title, description) VALUES "
-            + "(" + ad.getUserId() + ", "
-            + "'" + ad.getTitle() +"', "
-            + "'" + ad.getDescription() + "')";
+                + "(" + ad.getUserId() + ", "
+                + "'" + ad.getTitle() +"', "
+                + "'" + ad.getDescription() + "')";
     }
 
     private Ad extractAd(ResultSet rs) throws SQLException {
         return new Ad(
-            rs.getLong("id"),
-            rs.getLong("user_id"),
-            rs.getString("title"),
-            rs.getString("description")
+                rs.getLong("id"),
+                rs.getLong("user_id"),
+                rs.getString("title"),
+                rs.getString("description")
         );
     }
 
